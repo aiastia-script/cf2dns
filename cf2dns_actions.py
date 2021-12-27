@@ -113,8 +113,6 @@ def main(cloud):
             cf_cmips = cfips["info"]["CM"]
             cf_cuips = cfips["info"]["CU"]
             cf_ctips = cfips["info"]["CT"]
-            cf_abips = cfips["info"]["AB"]
-            cf_defips = cfips["info"]["DEF"]
             for domain, sub_domains in DOMAINS.items():
                 for sub_domain, lines in sub_domains.items():
                     temp_cf_cmips = cf_cmips.copy()
