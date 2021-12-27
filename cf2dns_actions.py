@@ -47,7 +47,7 @@ def get_optimization_ip():
 def changeDNS(line, s_info, c_info, domain, sub_domain, cloud):
     global AFFECT_NUM
     if line == "CM":
-        line = "default"
+        line = "移动"
     elif line == "CU":
         line = "联通"
     elif line == "CT":
@@ -124,7 +124,7 @@ def main(cloud):
                         ret = cloud.get_record(domain, 20, sub_domain, "CNAME")
                         if ret["code"] == 0:
                             for record in ret["data"]["records"]:
-                                if record["line"] == "default" or record["line"] == "联通" or record["line"] == "电信":
+                                if record["line"] == "移动" or record["line"] == "联通" or record["line"] == "电信":
                                     retMsg = cloud.del_record(domain, record["id"])
                                     if(retMsg["code"] == 0):
                                         print("DELETE DNS SUCCESS: ----Time: "  + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())) + "----DOMAIN: " + domain + "----SUBDOMAIN: " + sub_domain + "----RECORDLINE: "+record["line"] )
@@ -138,7 +138,7 @@ def main(cloud):
                         cu_info = []
                         ct_info = []
                         for record in ret["data"]["records"]:
-                            if record["line"] == "default":
+                            if record["line"] == "移动":
                                 info = {}
                                 info["recordId"] = record["id"]
                                 info["value"] = record["value"]
