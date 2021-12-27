@@ -12,8 +12,8 @@ import urllib.parse
 import urllib3
 import os
 import traceback
-from _dns.qCloud import QcloudApi
-from _dns.aliyun import AliApi
+from dns.qCloud import QcloudApi
+from dns.aliyun import AliApi
 
 #可以从https://shop.hostmonit.com获取
 KEY = os.environ["KEY"]  #"o1zrmHAF"
@@ -24,7 +24,7 @@ DOMAINS = json.loads(os.environ["DOMAINS"])  #{"hostmonit.com": {"@": ["CM","CU"
 SECRETID = os.environ["SECRETID"]    #'AKIDV**********Hfo8CzfjgN'
 SECRETKEY = os.environ["SECRETKEY"]   #'ZrVs*************gqjOp1zVl'
 #默认为普通版本 不用修改
-AFFECT_NUM = 1
+AFFECT_NUM = 2
 #DNS服务商 如果使用DNSPod改为1 如果使用阿里云解析改成2
 DNS_SERVER = 2
 #解析生效时间，默认为600秒 如果不是DNS付费版用户 不要修改!!!
@@ -52,10 +52,6 @@ def changeDNS(line, s_info, c_info, domain, sub_domain, cloud):
         line = "联通"
     elif line == "CT":
         line = "电信"
-    elif line == "AB":
-        line = "境外"
-    elif line == "DEF":
-        line = "default"
     else:
         print("CHANGE DNS ERROR: ----Time: " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())) + "----MESSAGE: LINE ERROR")
         return
@@ -118,8 +114,6 @@ def main(cloud):
                     temp_cf_cmips = cf_cmips.copy()
                     temp_cf_cuips = cf_cuips.copy()
                     temp_cf_ctips = cf_ctips.copy()
-                    temp_cf_abips = cf_ctips.copy()
-                    temp_cf_defips = cf_ctips.copy()
                     if DNS_SERVER == 1:
                         ret = cloud.get_record(domain, 20, sub_domain, "CNAME")
                         if ret["code"] == 0:
@@ -153,16 +147,6 @@ def main(cloud):
                                 info["recordId"] = record["id"]
                                 info["value"] = record["value"]
                                 ct_info.append(info)
-                            if record["line"] == "境外":
-                                info = {}
-                                info["recordId"] = record["id"]
-                                info["value"] = record["value"]
-                                ab_info.append(info)
-                            if record["line"] == "default":
-                                info = {}
-                                info["recordId"] = record["id"]
-                                info["value"] = record["value"]
-                                def_info.append(info)
                         for line in lines:
                             if line == "CM":
                                 changeDNS("CM", cm_info, temp_cf_cmips, domain, sub_domain, cloud)
@@ -170,10 +154,6 @@ def main(cloud):
                                 changeDNS("CU", cu_info, temp_cf_cuips, domain, sub_domain, cloud)
                             elif line == "CT":
                                 changeDNS("CT", ct_info, temp_cf_ctips, domain, sub_domain, cloud)
-                            elif line == "AB":
-                                changeDNS("AB", ab_info, temp_cf_abips, domain, sub_domain, cloud)
-                            elif line == "DEF":
-                                changeDNS("DEF", def_info, temp_cf_defips, domain, sub_domain, cloud)
         except Exception as e:
             print("CHANGE DNS ERROR: ----Time: " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())) + "----MESSAGE: " + str(traceback.print_exc()))
 
