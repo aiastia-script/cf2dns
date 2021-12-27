@@ -55,7 +55,7 @@ def changeDNS(line, s_info, c_info, domain, sub_domain, cloud):
     elif line == "AB":
         line = "境外"
     elif line == "DEF":
-        line = "默认"
+        line = "default"
     else:
         print("CHANGE DNS ERROR: ----Time: " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())) + "----MESSAGE: LINE ERROR")
         return
@@ -158,7 +158,7 @@ def main(cloud):
                                 info["recordId"] = record["id"]
                                 info["value"] = record["value"]
                                 ab_info.append(info)
-                            if record["line"] == "默认":
+                            if record["line"] == "default":
                                 info = {}
                                 info["recordId"] = record["id"]
                                 info["value"] = record["value"]
